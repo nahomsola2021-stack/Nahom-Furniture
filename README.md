@@ -1,4 +1,4 @@
-# 🪑 Nahom Furniture – E-commerce & Product Showcase Website
+# 🪑 Nahom Furniture – Product Showcase Website
 
 ## 🌍 Overview
 **Nahom Furniture** is a modern and elegant website designed for showcasing and promoting furniture products online. The platform provides a clean and user-friendly interface where customers can explore different furniture collections, view product details, and make inquiries.
