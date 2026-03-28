@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Nahom Furniture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Poppins', sans-serif; } </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold text-gray-900">NAHOM<span class="text-orange-500">FURNITURE</span></a>
+            <a href="products.html" class="bg-gray-900 text-white px-5 py-2 rounded-lg font-semibold hover:bg-gray-800 transition">Back to Products</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <div id="product-details-container">
+            <!-- Product details loaded here -->
+            <p class="text-center">Loading product details...</p>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white mt-12">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2024 Nahom Furniture. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const detailsContainer = document.getElementById('product-details-container');
+            const productId = new URLSearchParams(window.location.search).get('id');
+
+            if (!productId) {
+                detailsContainer.innerHTML = '<p class="text-red-500 text-center">Invalid product ID.</p>';
+                return;
+            }
+
+            db.collection('products').doc(productId).get().then(doc => {
+                if (!doc.exists) {
+                    detailsContainer.innerHTML = '<p class="text-red-500 text-center">Product not found.</p>';
+                    return;
+                }
+                const product = doc.data();
+                detailsContainer.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div>
+                            <img src="${(product.images && product.images[0]) || 'https://placehold.co/800x600'}" alt="${product.type}" class="w-full rounded-lg shadow-lg">
+                        </div>
+                        <div>
+                            <span class="text-sm text-gray-500 font-semibold uppercase">${product.category}</span>
+                            <h1 class="text-4xl font-bold mt-2">${product.type}</h1>
+                            <p class="text-4xl font-bold text-orange-500 my-4">${(product.price || 0).toLocaleString()} ETB</p>
+                            <h3 class="text-xl font-semibold border-t pt-4 mt-4">Description</h3>
+                            <p class="text-gray-600 mt-2 whitespace-pre-wrap">${product.description || 'No description available.'}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>

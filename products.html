@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Products - Nahom Furniture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .category-btn { transition: all 0.2s ease; }
+        .category-btn.active { background-color: #F35525; color: white; border-color: #F35525; }
+        .skeleton { background-color: #f3f4f6; }
+        .skeleton-text { background-color: #e5e7eb; }
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 50% { opacity: .5; } }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold text-gray-900">NAHOM<span class="text-orange-500">FURNITURE</span></a>
+            <nav class="hidden md:flex space-x-8 items-center">
+                <a href="index.html" class="text-gray-500 hover:text-orange-500 transition">Home</a>
+                <a href="products.html" class="text-gray-900 font-semibold border-b-2 border-orange-500 pb-1">Our Products</a>
+                <a href="aboutus.html" class="text-gray-500 hover:text-orange-500 transition">About Us</a>
+                <a href="contactus.html" class="text-gray-500 hover:text-orange-500 transition">Contact Us</a>
+                <a href="#" class="bg-gray-900 text-white px-5 py-2 rounded-lg font-semibold hover:bg-gray-800 transition">Login/Register</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold">Our Products</h1>
+            <p class="text-gray-500 mt-2">Explore our collections of handcrafted furniture.</p>
+        </div>
+        
+        <!-- Category Filters -->
+        <div id="category-filter" class="flex flex-wrap justify-center gap-4 mb-12">
+            <button data-category="all" class="category-btn active px-8 py-3 text-lg font-semibold border-2 border-gray-900 rounded-lg">All Products</button>
+            <button data-category="Bedroom Furniture" class="category-btn px-8 py-3 text-lg font-semibold border-2 border-gray-900 rounded-lg hover:bg-gray-100">Bedroom Furniture</button>
+            <button data-category="Office Furniture" class="category-btn px-8 py-3 text-lg font-semibold border-2 border-gray-900 rounded-lg hover:bg-gray-100">Office Furniture</button>
+            <button data-category="Kitchen Furniture" class="category-btn px-8 py-3 text-lg font-semibold border-2 border-gray-900 rounded-lg hover:bg-gray-100">Kitchen Furniture</button>
+            <button data-category="Living Room" class="category-btn px-8 py-3 text-lg font-semibold border-2 border-gray-900 rounded-lg hover:bg-gray-100">Living Room</button>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Products loaded here -->
+        </div>
+    </main>
+    
+    <footer class="bg-gray-900 text-white mt-12">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2024 Nahom Furniture. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const productsGrid = document.getElementById('products-grid');
+            const categoryFilter = document.getElementById('category-filter');
+            let allProducts = [];
+
+            function renderSkeletonCards() {
+                let skeletonHTML = '';
+                for (let i = 0; i < 8; i++) { // Show 8 skeletons
+                    skeletonHTML += `
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+                            <div class="skeleton w-full h-64"></div>
+                            <div class="p-4">
+                                <div class="skeleton-text h-4 w-1/3 mb-2 rounded"></div>
+                                <div class="skeleton-text h-5 w-3/4 mb-3 rounded"></div>
+                                <div class="skeleton-text h-6 w-1/2 rounded"></div>
+                            </div>
+                        </div>`;
+                }
+                productsGrid.innerHTML = skeletonHTML;
+            }
+
+            function renderProducts(productsToRender) {
+                productsGrid.innerHTML = '';
+                if (productsToRender.length === 0) {
+                    productsGrid.innerHTML = '<p class="col-span-full text-center">No products found for this category.</p>';
+                    return;
+                }
+                productsToRender.forEach(product => {
+                    let imageUrl = (product.images && product.images[0]) || 'https://placehold.co/600x400';
+                    if (imageUrl.includes('res.cloudinary.com')) {
+                        const parts = imageUrl.split('/upload/');
+                        imageUrl = `${parts[0]}/upload/w_600,q_auto,f_auto/${parts[1]}`;
+                    }
+
+                    const card = document.createElement('a');
+                    card.href = `product_details.html?id=${product.id}`;
+                    card.className = 'product-card bg-white rounded-lg shadow-md overflow-hidden block hover:shadow-xl transition-shadow';
+                    card.innerHTML = `
+                        <img src="${imageUrl}" class="w-full h-64 object-cover">
+                        <div class="p-4">
+                            <span class="text-sm text-gray-500">${product.category}</span>
+                            <h3 class="text-lg font-semibold mt-1">${product.type}</h3>
+                            <p class="text-xl font-bold text-orange-500 mt-2">${(product.price || 0).toLocaleString()} ETB</p>
+                        </div>
+                    `;
+                    productsGrid.appendChild(card);
+                });
+            }
+
+            async function fetchAllProducts() {
+                renderSkeletonCards();
+                try {
+                    const snapshot = await db.collection('products').get();
+                    allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    renderProducts(allProducts);
+                } catch (error) {
+                    console.error("Error fetching products: ", error);
+                    productsGrid.innerHTML = '<p class="col-span-full text-center text-red-500">Could not load products.</p>';
+                }
+            }
+            
+            categoryFilter.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    const category = e.target.dataset.category;
+                    categoryFilter.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    if (category === 'all') {
+                        renderProducts(allProducts);
+                    } else {
+                        const filtered = allProducts.filter(p => p.category === category);
+                        renderProducts(filtered);
+                    }
+                }
+            });
+            
+            fetchAllProducts();
+        });
+    </script>
+</body>
+</html>```

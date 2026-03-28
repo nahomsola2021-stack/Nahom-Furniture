@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Nahom Furniture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style> 
+        body { font-family: 'Poppins', sans-serif; } 
+        .toast { transition: transform 0.3s ease, opacity 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-800 text-white flex flex-col">
+            <div class="px-6 py-4 border-b border-gray-700">
+                <h1 class="text-2xl font-bold">NAHOM<span class="text-orange-500">FURNITURE</span></h1>
+                <p class="text-sm text-gray-400">Admin Panel</p>
+            </div>
+            <nav class="flex-grow p-4">
+                <a href="#" class="flex items-center px-4 py-2 text-white bg-gray-700 rounded-lg">Product Management</a>
+            </nav>
+            <div class="p-4 border-t border-gray-700">
+                <button id="logoutBtn" class="w-full text-left flex items-center px-4 py-2 text-white hover:bg-red-600 rounded-lg">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white shadow p-6 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-gray-800">Dashboard</h2>
+                <div class="flex items-center space-x-2">
+                    <span id="adminEmail" class="text-sm font-semibold text-gray-600"></span>
+                </div>
+            </header>
+            <main class="flex-1 overflow-y-auto p-6">
+                <!-- Dashboard Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white p-5 shadow rounded-lg flex items-center space-x-4">
+                        <div class="bg-blue-100 p-3 rounded-full"><svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg></div>
+                        <div><h4 class="text-gray-500">Total Products</h4><p id="totalProducts" class="text-3xl font-bold">0</p></div>
+                    </div>
+                    <div class="bg-white p-5 shadow rounded-lg flex items-center space-x-4">
+                        <div class="bg-purple-100 p-3 rounded-full"><svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5a2 2 0 012 2v5a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2zm0 0v11h11V3H7z"></path></svg></div>
+                        <div><h4 class="text-gray-500">Categories</h4><p id="totalCategories" class="text-3xl font-bold">0</p></div>
+                    </div>
+                </div>
+
+                <!-- Product Table -->
+                <div class="bg-white shadow rounded-lg p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">Product Listings</h3>
+                        <button id="addProductBtn" class="bg-orange-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-orange-600">Add New Product</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="py-2 px-4 border-b text-left">Image</th>
+                                    <th class="py-2 px-4 border-b text-left">Category</th>
+                                    <th class="py-2 px-4 border-b text-left">Type</th>
+                                    <th class="py-2 px-4 border-b text-left">Price</th>
+                                    <th class="py-2 px-4 border-b text-left">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Add/Edit Modal -->
+    <div id="productModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-screen overflow-y-auto">
+            <div class="p-6 border-b flex justify-between items-center">
+                <h3 id="modalTitle" class="text-2xl font-bold">Add New Product</h3>
+                <button id="closeModalBtn" class="text-2xl">&times;</button>
+            </div>
+            <form id="productForm" class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="block mb-1">Category</label><select id="category" name="category" class="w-full p-2 border rounded-lg" required></select></div>
+                    <div><label class="block mb-1">Furniture Type</label><select id="type" name="type" class="w-full p-2 border rounded-lg" required></select></div>
+                    <div class="md:col-span-2"><label class="block mb-1">Price (ETB)</label><input type="number" step="0.01" id="price" name="price" class="w-full p-2 border rounded-lg" required></div>
+                    <div class="md:col-span-2"><label class="block mb-1">Description</label><textarea id="description" name="description" rows="4" class="w-full p-2 border rounded-lg"></textarea></div>
+                    <div class="md:col-span-2"><label class="block mb-1">Images</label><input type="file" id="imageUpload" name="imageUpload" multiple class="w-full"><input type="hidden" id="imageUrls"><div id="imagePreview" class="mt-2 flex flex-wrap gap-2"></div></div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button" id="cancelBtn" class="px-5 py-2 bg-gray-200 rounded-lg">Cancel</button>
+                    <button type="submit" id="saveBtn" class="px-5 py-2 bg-orange-500 text-white rounded-lg">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl">
+            <h3 class="text-lg font-bold">Confirm Deletion</h3>
+            <p class="my-4">Are you sure you want to delete this product?</p>
+            <div class="flex justify-end space-x-3">
+                <button id="cancelDelete" class="px-4 py-2 bg-gray-200 rounded-lg">Cancel</button>
+                <button id="confirmDelete" class="px-4 py-2 bg-red-600 text-white rounded-lg">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0">
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                user.getIdTokenResult(true).then(idTokenResult => { // Force refresh the token
+                    if (!!idTokenResult.claims.admin) {
+                        document.getElementById('adminEmail').textContent = user.email;
+                        initializeDashboard();
+                    } else {
+                        alert("Access Denied. You are not an authorized admin.");
+                        window.location.href = '/index.html';
+                    }
+                });
+            } else {
+                window.location.href = '/adminlogin.html';
+            }
+        });
+
+        function initializeDashboard() {
+            const productModal = document.getElementById('productModal');
+            const addProductBtn = document.getElementById('addProductBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const productForm = document.getElementById('productForm');
+            const categorySelect = document.getElementById('category');
+            const typeSelect = document.getElementById('type');
+            const productsTable = document.getElementById('products-table');
+            const modalTitle = document.getElementById('modalTitle');
+            const imageUpload = document.getElementById('imageUpload');
+            const imagePreview = document.getElementById('imagePreview');
+            const imageUrlsInput = document.getElementById('imageUrls');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const deleteModal = document.getElementById('deleteModal');
+            const totalProductsEl = document.getElementById('totalProducts');
+            const totalCategoriesEl = document.getElementById('totalCategories');
+
+            let currentProductId = null;
+            let productToDeleteId = null;
+            
+            const furnitureTypes = {
+                "Bedroom Furniture": ["Beds", "Drawers"],
+                "Office Furniture": ["Office Chair", "Tables", "Conference Tables"],
+                "Kitchen Furniture": ["Cabinets"],
+                "Living Room": ["Sofas", "Dining Tables", "Shelf"]
+            };
+
+            categorySelect.innerHTML = '<option value="">Select Category</option>';
+            Object.keys(furnitureTypes).forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                categorySelect.appendChild(option);
+            });
+
+            categorySelect.addEventListener('change', () => {
+                const selectedCategory = categorySelect.value;
+                const currentTypeValue = typeSelect.value;
+                typeSelect.innerHTML = '<option value="">Select Type</option>';
+                if(furnitureTypes[selectedCategory]) {
+                    furnitureTypes[selectedCategory].forEach(type => {
+                        const option = document.createElement('option');
+                        option.value = type;
+                        option.textContent = type;
+                        typeSelect.appendChild(option);
+                    });
+                    if (furnitureTypes[selectedCategory].includes(currentTypeValue)) {
+                        typeSelect.value = currentTypeValue;
+                    }
+                }
+            });
+            
+            const openModal = () => productModal.classList.remove('hidden');
+            const closeModal = () => productModal.classList.add('hidden');
+
+            function showToast(message, isSuccess = true) {
+                toastMessage.textContent = message;
+                toast.className = `toast fixed bottom-4 right-4 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 ${isSuccess ? 'bg-green-500' : 'bg-red-500'}`;
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                }, 3000);
+            }
+
+            addProductBtn.addEventListener('click', () => {
+                currentProductId = null;
+                modalTitle.textContent = "Add New Product";
+                productForm.reset();
+                imagePreview.innerHTML = '';
+                imageUrlsInput.value = '';
+                categorySelect.dispatchEvent(new Event('change'));
+                openModal();
+            });
+            
+            cancelBtn.addEventListener('click', closeModal);
+            closeModalBtn.addEventListener('click', closeModal);
+
+            imageUpload.addEventListener('change', (e) => {
+                imagePreview.innerHTML = '';
+                Array.from(e.target.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const img = document.createElement('img');
+                        img.src = event.target.result;
+                        img.className = 'w-20 h-20 object-cover rounded';
+                        imagePreview.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            async function uploadImages() {
+                const files = imageUpload.files;
+                if (!files || files.length === 0) return [];
+                const uploadPromises = Array.from(files).map(file => {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                    return fetch(CLOUDINARY_URL, { method: 'POST', body: formData })
+                        .then(response => response.json())
+                        .then(data => data.secure_url)
+                        .catch(error => { console.error('Image upload failed:', error); return null; });
+                });
+                return Promise.all(uploadPromises);
+            }
+
+            productForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                saveBtn.disabled = true;
+                saveBtn.textContent = 'Saving...';
+                try {
+                    const newImageUrls = await uploadImages();
+                    if (newImageUrls.some(url => url === null)) throw new Error("Image upload failed.");
+
+                    const formData = new FormData(productForm);
+                    const productData = {
+                        category: formData.get('category'),
+                        type: formData.get('type'),
+                        description: formData.get('description'),
+                        price: parseFloat(formData.get('price')) || 0,
+                    };
+                    
+                    const existingImageUrls = imageUrlsInput.value.split(',').filter(Boolean);
+                    productData.images = newImageUrls.length > 0 ? newImageUrls : existingImageUrls;
+
+                    if (currentProductId) {
+                        await db.collection('products').doc(currentProductId).update(productData);
+                        showToast('Product updated successfully!');
+                    } else {
+                        await db.collection('products').add(productData);
+                        showToast('Product added successfully!');
+                    }
+                    closeModal();
+                } catch(error) {
+                    console.error("Error saving product:", error);
+                    showToast(`Error: ${error.message}`, false);
+                } finally {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Save Product';
+                }
+            });
+
+            db.collection('products').orderBy('category').onSnapshot(snapshot => {
+                productsTable.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const product = doc.data();
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="py-2 px-4 border-b"><img src="${(product.images && product.images[0]) || 'https://placehold.co/80x60'}" class="w-16 h-12 object-cover rounded"></td>
+                        <td class="py-2 px-4 border-b">${product.category}</td>
+                        <td class="py-2 px-4 border-b">${product.type}</td>
+                        <td class="py-2 px-4 border-b">${(product.price || 0).toLocaleString()} ETB</td>
+                        <td class="py-2 px-4 border-b">
+                            <button onclick="window.editProduct('${doc.id}')" class="text-blue-500 hover:text-blue-700">Edit</button>
+                            <button onclick="window.deleteProduct('${doc.id}')" class="text-red-500 hover:text-red-700 ml-4">Delete</button>
+                        </td>`;
+                    productsTable.appendChild(row);
+                });
+                updateStats(snapshot.docs);
+            });
+
+            window.editProduct = async function(id) {
+                const doc = await db.collection('products').doc(id).get();
+                if (!doc.exists) return;
+                const product = doc.data();
+                currentProductId = id;
+                modalTitle.textContent = "Edit Product";
+
+                document.getElementById('category').value = product.category || '';
+                categorySelect.dispatchEvent(new Event('change')); 
+                setTimeout(() => { 
+                    document.getElementById('type').value = product.type || '';
+                }, 100);
+                document.getElementById('price').value = product.price || '';
+                document.getElementById('description').value = product.description || '';
+                
+                imageUrlsInput.value = (product.images || []).join(',');
+                imagePreview.innerHTML = (product.images || []).map(url => `<img src="${url}" class="w-20 h-20 object-cover rounded">`).join('');
+                openModal();
+            };
+
+            window.deleteProduct = (id) => {
+                productToDeleteId = id;
+                deleteModal.classList.remove('hidden');
+            };
+            document.getElementById('cancelDelete').addEventListener('click', () => deleteModal.classList.add('hidden'));
+            document.getElementById('confirmDelete').addEventListener('click', async () => {
+                if(productToDeleteId) {
+                    await db.collection('products').doc(productToDeleteId).delete();
+                    showToast('Product deleted successfully!');
+                    deleteModal.classList.add('hidden');
+                }
+            });
+
+            function updateStats(docs) {
+                totalProductsEl.textContent = docs.length;
+                const categories = new Set(docs.map(doc => doc.data().category).filter(Boolean));
+                totalCategoriesEl.textContent = categories.size;
+            }
+            
+            logoutBtn.addEventListener('click', () => firebase.auth().signOut());
+        }
+    </script>
+</body>
+</html>

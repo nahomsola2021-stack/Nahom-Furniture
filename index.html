@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nahom Furniture - Premium Furnishings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .font-title { font-family: 'Montserrat', sans-serif; }
+        .hero-video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        #heroVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .modal { transition: opacity 0.3s ease-in-out; }
+        .skeleton { background-color: #f3f4f6; }
+        .skeleton-text { background-color: #e5e7eb; }
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 50% { opacity: .5; } }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <!-- Header & Navigation -->
+    <header class="absolute top-0 left-0 w-full z-50">
+        <div class="container mx-auto px-6 py-6 flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold text-white tracking-wider">NAHOM<span class="text-orange-500">FURNITURE</span></a>
+            <nav class="hidden md:flex space-x-8 items-center text-white font-semibold">
+                <a href="index.html" class="border-b-2 border-orange-500 pb-1">Home</a>
+                <a href="products.html" class="hover:text-orange-500 transition">Our Products</a>
+                <a href="aboutus.html" class="hover:text-orange-500 transition">About Us</a>
+                <a href="contactus.html" class="hover:text-orange-500 transition">Contact Us</a>
+                <div id="auth-container">
+                    <button id="loginModalBtn" class="bg-white text-gray-900 px-5 py-2 rounded-lg hover:bg-gray-200 transition">Login/Register</button>
+                    <div id="user-info" class="hidden items-center space-x-4">
+                        <span id="user-email" class="text-sm"></span>
+                        <button id="logoutBtn" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-700 transition">Logout</button>
+                    </div>
+                </div>
+            </nav>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden absolute top-0 left-0 w-full bg-gray-900/95 z-40 pt-24 p-4">
+            <a href="index.html" class="mobile-nav-link block py-2 px-4 text-lg text-white hover:bg-gray-800 rounded">Home</a>
+            <a href="products.html" class="mobile-nav-link block py-2 px-4 text-lg text-white hover:bg-gray-800 rounded">Our Products</a>
+            <a href="aboutus.html" class="mobile-nav-link block py-2 px-4 text-lg text-white hover:bg-gray-800 rounded">About Us</a>
+            <a href="contactus.html" class="mobile-nav-link block py-2 px-4 text-lg text-white hover:bg-gray-800 rounded">Contact Us</a>
+            <div id="mobile-auth-container" class="border-t border-gray-700 mt-4 pt-4">
+                 <button id="mobileLoginBtn" class="w-full text-center py-3 bg-orange-500 text-white rounded-lg font-semibold">Login / Register</button>
+                 <div id="mobile-user-info" class="hidden text-center">
+                    <span id="mobile-user-email" class="block text-white mb-3"></span>
+                    <button id="mobileLogoutBtn" class="w-full text-center py-3 bg-red-600 text-white rounded-lg font-semibold">Logout</button>
+                 </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Full Screen Video Hero -->
+        <section class="relative h-screen flex items-center justify-center text-white text-center">
+            <div class="hero-video-container">
+                <div class="absolute inset-0 bg-black/50"></div>
+                <video autoplay loop muted playsinline preload="metadata" poster="images/hero-poster.jpg" id="heroVideo">
+                    <source src="images/hero-video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="relative z-10 p-4">
+                <h1 class="font-title text-6xl md:text-8xl font-extrabold uppercase tracking-tighter">Design Your World</h1>
+                <p class="mt-4 text-xl text-gray-200 max-w-2xl mx-auto">Experience unparalleled craftsmanship and timeless style with our exclusive furniture collections.</p>
+                <a href="products.html" class="mt-8 inline-block bg-orange-500 text-white px-10 py-4 rounded-lg font-semibold text-lg hover:bg-orange-600 transition-transform hover:scale-105">Explore Collections</a>
+            </div>
+        </section>
+
+        <!-- Featured Products Section -->
+        <section class="py-24 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="font-title text-4xl md:text-5xl font-bold">Featured Products</h2>
+                    <p class="text-gray-500 mt-4 text-lg">Handpicked selections from our latest collection.</p>
+                </div>
+                <div id="featured-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- SKELETON LOADER (pre-rendered in HTML for instant feedback) -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden animate-pulse">
+                        <div class="skeleton w-full h-72"></div>
+                        <div class="p-6">
+                            <div class="skeleton-text h-4 w-1/3 mb-2 rounded"></div>
+                            <div class="skeleton-text h-6 w-3/4 mb-3 rounded"></div>
+                            <div class="skeleton-text h-8 w-1/2 rounded"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden animate-pulse">
+                        <div class="skeleton w-full h-72"></div>
+                        <div class="p-6">
+                            <div class="skeleton-text h-4 w-1/3 mb-2 rounded"></div>
+                            <div class="skeleton-text h-6 w-3/4 mb-3 rounded"></div>
+                            <div class="skeleton-text h-8 w-1/2 rounded"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden animate-pulse">
+                        <div class="skeleton w-full h-72"></div>
+                        <div class="p-6">
+                            <div class="skeleton-text h-4 w-1/3 mb-2 rounded"></div>
+                            <div class="skeleton-text h-6 w-3/4 mb-3 rounded"></div>
+                            <div class="skeleton-text h-8 w-1/2 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Parallax Counter Section -->
+        <section class="py-32 parallax" style="background-image: url('images/parallax-bg.jpg');">
+            <div class="container mx-auto px-6 bg-black/50 py-16 rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-white text-center">
+                    <div><span class="counter text-6xl font-bold" data-target="1500">0</span><p class="text-xl mt-2 text-gray-300">Projects Completed</p></div>
+                    <div><span class="counter text-6xl font-bold" data-target="900">0</span><p class="text-xl mt-2 text-gray-300">Happy Clients</p></div>
+                    <div><span class="counter text-6xl font-bold" data-target="500">0</span><p class="text-xl mt-2 text-gray-300">Unique Pieces</p></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Gallery Section -->
+        <section class="py-24">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-16">
+                    <h2 class="font-title text-4xl md:text-5xl font-bold">Our Gallery</h2>
+                    <p class="text-gray-500 mt-4 text-lg">A glimpse into the spaces we've transformed.</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="grid gap-4">
+                        <div><img loading="lazy" class="h-auto max-w-full rounded-lg shadow-lg" src="images/gallery1.jpg" alt="Gallery image 1"></div>
+                        <div><img loading="lazy" class="h-auto max-w-full rounded-lg shadow-lg" src="images/gallery2.jpg" alt="Gallery image 2"></div>
+                    </div>
+                    <div class="grid gap-4">
+                        <div><img loading="lazy" class="h-auto max-w-full rounded-lg shadow-lg" src="images/gallery3.jpg" alt="Gallery image 3"></div>
+                        <div><img loading="lazy" class="h-auto max-w-full rounded-lg shadow-lg" src="images/gallery4.jpg" alt="Gallery image 4"></div>
+                    </div>
+                    <div class="grid gap-4">
+                        <div><img loading="lazy" class="h-auto max-w-full rounded-lg shadow-lg" src="images/gallery2.jpg" alt="Gallery image 5"></div>
+                        <div><img loading="lazy" class="h-auto max-w-full rounded-lg shadow-lg" src="images/gallery1.jpg" alt="Gallery image 6"></div>
+                    </div>
+                     <div class="grid gap-4">
+                        <div><img loading="lazy" class="h-auto max-w-full rounded-lg shadow-lg" src="images/gallery4.jpg" alt="Gallery image 7"></div>
+                        <div><img loading="lazy" class="h-auto max-w-full rounded-lg shadow-lg" src="images/gallery3.jpg" alt="Gallery image 8"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-white">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <p>&copy; 2024 Nahom Furniture. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Login/Register Modal -->
+    <div id="loginModal" class="modal fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md text-gray-800 relative">
+            <button id="closeLoginModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700">&times;</button>
+            <h2 class="text-2xl font-bold text-center mb-2" id="form-title">Welcome Back</h2>
+            <p class="text-center text-gray-500 mb-6" id="form-subtitle">Login to your account.</p>
+            <form id="popupLoginForm">
+                <div class="mb-4"><label for="popup-login-email" class="block mb-1 font-semibold">Email</label><input type="email" id="popup-login-email" class="w-full px-4 py-2 border rounded-lg" required></div>
+                <div class="mb-6"><label for="popup-login-password" class="block mb-1 font-semibold">Password</label><input type="password" id="popup-login-password" class="w-full px-4 py-2 border rounded-lg" required></div>
+                <button type="submit" class="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition">Login</button>
+            </form>
+            <form id="popupRegisterForm" class="hidden">
+                 <div class="mb-4"><label for="popup-register-email" class="block mb-1 font-semibold">Email</label><input type="email" id="popup-register-email" class="w-full px-4 py-2 border rounded-lg" required></div>
+                <div class="mb-6"><label for="popup-register-password" class="block mb-1 font-semibold">Password</label><input type="password" id="popup-register-password" class="w-full px-4 py-2 border rounded-lg" required></div>
+                <button type="submit" class="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition">Register</button>
+            </form>
+            <p id="auth-message" class="text-center text-sm mt-4 hidden"></p>
+            <p class="text-center text-sm text-gray-500 mt-4">
+                <span id="login-text">Don't have an account? <a href="#" id="showRegister" class="text-orange-500 hover:underline">Register here</a></span>
+                <span id="register-text" class="hidden">Already have an account? <a href="#" id="showLogin" class="text-orange-500 hover:underline">Login here</a></span>
+            </p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const auth = firebase.auth();
+            const loginModal = document.getElementById('loginModal');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const featuredContainer = document.getElementById('featured-products');
+
+            function fetchFeaturedProducts() {
+                db.collection('products').limit(3).get().then(snapshot => {
+                    featuredContainer.innerHTML = '';
+                    if (snapshot.empty) {
+                        featuredContainer.innerHTML = '<p class="col-span-3 text-center">No featured products available.</p>';
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        const product = doc.data();
+                        let imageUrl = (product.images && product.images[0]) || 'https://placehold.co/600x400';
+                        if (imageUrl.includes('res.cloudinary.com')) {
+                            const parts = imageUrl.split('/upload/');
+                            imageUrl = `${parts[0]}/upload/w_600,q_auto,f_auto/${parts[1]}`;
+                        }
+                        const card = document.createElement('div');
+                        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden transition-transform hover:-translate-y-2';
+                        card.innerHTML = `<a href="product_details.html?id=${doc.id}" class="block"><img loading="lazy" src="${imageUrl}" class="w-full h-72 object-cover"><div class="p-6"><span class="text-sm text-gray-500">${product.category}</span><h3 class="text-xl font-semibold mt-1">${product.type}</h3><p class="text-2xl font-bold text-orange-500 mt-2">${(product.price || 0).toLocaleString()} ETB</p></div></a>`;
+                        featuredContainer.appendChild(card);
+                    });
+                });
+            }
+
+            const counters = document.querySelectorAll('.counter');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = +counter.getAttribute('data-target');
+                        let count = 0;
+                        const speed = 200;
+                        const inc = target / speed;
+                        const updateCount = () => {
+                            if (count < target) {
+                                count += inc;
+                                counter.innerText = Math.ceil(count).toLocaleString();
+                                setTimeout(updateCount, 1);
+                            } else {
+                                counter.innerText = target.toLocaleString();
+                            }
+                        };
+                        updateCount();
+                        observer.unobserve(counter);
+                    }
+                });
+            }, { threshold: 0.5 });
+            counters.forEach(counter => observer.observe(counter));
+            
+            const loginModalBtn = document.getElementById('loginModalBtn');
+            const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+            
+            function openLoginModal() {
+                loginModal.classList.remove('hidden');
+                document.getElementById('closeLoginModal').addEventListener('click', () => loginModal.classList.add('hidden'));
+                const popupLoginForm = document.getElementById('popupLoginForm');
+                const popupRegisterForm = document.getElementById('popupRegisterForm');
+                const authMessage = document.getElementById('auth-message');
+                
+                function showAuthMessage(message, isSuccess) {
+                    authMessage.textContent = message;
+                    authMessage.classList.remove('hidden');
+                    authMessage.classList.toggle('text-green-500', isSuccess);
+                    authMessage.classList.toggle('text-red-500', !isSuccess);
+                }
+
+                popupLoginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    auth.signInWithEmailAndPassword(document.getElementById('popup-login-email').value, document.getElementById('popup-login-password').value)
+                        .then(() => { 
+                            showAuthMessage('Login successful!', true);
+                            setTimeout(() => loginModal.classList.add('hidden'), 1500);
+                         })
+                        .catch(error => showAuthMessage(`Login Failed: ${error.message}`, false));
+                });
+
+                popupRegisterForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    auth.createUserWithEmailAndPassword(document.getElementById('popup-register-email').value, document.getElementById('popup-register-password').value)
+                        .then(() => { 
+                            showAuthMessage('Registration successful! You are logged in.', true);
+                            setTimeout(() => loginModal.classList.add('hidden'), 2000);
+                        })
+                        .catch(error => showAuthMessage(`Registration Failed: ${error.message}`, false));
+                });
+                
+                document.getElementById('showRegister').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    popupLoginForm.classList.add('hidden'); popupRegisterForm.classList.remove('hidden');
+                    document.getElementById('form-subtitle').textContent = 'Create a new account.';
+                    document.getElementById('login-text').classList.add('hidden'); document.getElementById('register-text').classList.remove('hidden');
+                    authMessage.classList.add('hidden');
+                });
+
+                document.getElementById('showLogin').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    popupRegisterForm.classList.add('hidden'); popupLoginForm.classList.remove('hidden');
+                    document.getElementById('form-subtitle').textContent = 'Login to your account.';
+                    document.getElementById('register-text').classList.add('hidden'); document.getElementById('login-text').classList.remove('hidden');
+                    authMessage.classList.add('hidden');
+                });
+            }
+
+            loginModalBtn.addEventListener('click', openLoginModal);
+            mobileLoginBtn.addEventListener('click', () => { openLoginModal(); mobileMenu.classList.add('hidden'); });
+
+            const userInfoDiv = document.getElementById('user-info');
+            const userEmailSpan = document.getElementById('user-email');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const mobileUserInfoDiv = document.getElementById('mobile-user-info');
+            const mobileUserEmailSpan = document.getElementById('mobile-user-email');
+            const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+
+            auth.onAuthStateChanged(user => {
+                const isLoggedIn = !!user;
+                loginModalBtn.classList.toggle('hidden', isLoggedIn);
+                userInfoDiv.classList.toggle('hidden', !isLoggedIn);
+                userInfoDiv.classList.toggle('flex', isLoggedIn);
+                if(isLoggedIn) userEmailSpan.textContent = user.email;
+
+                mobileLoginBtn.classList.toggle('hidden', isLoggedIn);
+                mobileUserInfoDiv.classList.toggle('hidden', !isLoggedIn);
+                if(isLoggedIn) mobileUserEmailSpan.textContent = user.email;
+            });
+
+            const handleLogout = () => auth.signOut();
+            logoutBtn.addEventListener('click', handleLogout);
+            mobileLogoutBtn.addEventListener('click', handleLogout);
+            
+            document.getElementById('mobile-menu-button').addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            });
+
+            fetchFeaturedProducts();
+        });
+    </script>
+</body>
+</html>

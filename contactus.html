@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Nahom Furniture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Poppins', sans-serif; } .btn-primary { background-color: #F35525; } .btn-primary:hover { background-color: #E34A1A; } </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold text-gray-900">NAHOM<span class="text-orange-500">FURNITURE</span></a>
+            <nav class="hidden md:flex space-x-8 items-center">
+                <a href="index.html" class="text-gray-500 hover:text-orange-500 transition">Home</a>
+                <a href="products.html" class="text-gray-500 hover:text-orange-500 transition">Our Products</a>
+                <a href="aboutus.html" class="text-gray-500 hover:text-orange-500 transition">About Us</a>
+                <a href="contactus.html" class="text-gray-900 font-semibold border-b-2 border-orange-500 pb-1">Contact Us</a>
+                <a href="#" class="bg-gray-900 text-white px-5 py-2 rounded-lg font-semibold hover:bg-gray-800 transition">Login/Register</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold">Get In Touch</h1>
+            <p class="text-gray-500 mt-2">We'd love to hear from you. Please fill out the form below.</p>
+        </div>
+        <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 bg-white p-8 rounded-lg shadow-lg">
+            <div>
+                <h3 class="text-2xl font-bold mb-4">Contact Information</h3>
+                <div class="space-y-4 text-gray-600">
+                    <p><strong>Phone:</strong> +251 912 345 678</p>
+                    <p><strong>Email:</strong> contact@nahomfurniture.com</p>
+                    <p><strong>Address:</strong> Bole, Addis Ababa, Ethiopia</p>
+                </div>
+            </div>
+            <form>
+                <div class="mb-4"><label class="block mb-1">Full Name</label><input type="text" class="w-full p-2 border rounded-lg"></div>
+                <div class="mb-4"><label class="block mb-1">Email Address</label><input type="email" class="w-full p-2 border rounded-lg"></div>
+                <div class="mb-4"><label class="block mb-1">Message</label><textarea rows="5" class="w-full p-2 border rounded-lg"></textarea></div>
+                <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold transition">Send Message</button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white mt-12">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2024 Nahom Furniture. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
